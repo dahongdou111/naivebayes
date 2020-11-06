@@ -1,4 +1,3 @@
-import com.sun.org.apache.bcel.internal.classfile.ElementValue;
 import org.apache.hadoop.conf.Configuration;
 import org.apache.hadoop.conf.Configured;
 import org.apache.hadoop.fs.Path;
@@ -22,6 +21,8 @@ import java.util.Map;
 /**
  * @className: Evaluation
  * @description: 评估分类效果，三个指标precision, recall, F1
+ * @description: (input)<Text, Text> -> map -> <Text, DoubleWritable> -> combine -> <Text, DoubleWritable> -> reduce -> <Text, DoubleWritable>(output)
+ * @description: (input)<类别@文件名, 预测类别> -> map -> <指标, 一个类别的分数> -> combine -> <指标, 所有类别的平均分数> -> reduce -> <指标, 所有类别的平均分数>(output)
  * @author: dahongdou
  * @date: 2020/10/23
  **/

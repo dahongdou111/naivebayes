@@ -19,6 +19,8 @@ import java.io.IOException;
 /**
  * @className: WordList
  * @description: 获得所有类别的单词列表
+ * @description: (input)<Text, IntWritable> -> map -> <Text, IntWritable> -> combine -> <Text, IntWritable> -> reduce -> <Text, IntWritable>(output)
+ * @description: (input)<类别@单词, 个数> -> map -> <单词, 个数> -> combine -> <单词, 总个数> -> reduce -> <单词, 总个数>(output)
  * @author: dahongdou
  * @date: 2020/10/21
  **/

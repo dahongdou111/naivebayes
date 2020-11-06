@@ -18,6 +18,8 @@ import java.io.IOException;
 /**
  * @className: CountTotalWordsOfCategory
  * @description: 统计每个类别的总单词个数
+ * @description: (input)<Text, IntWritable> -> map -> <Text, IntWritable> -> combine -> <Text, IntWritable> -> reduce -> <Text, IntWritable>(output)
+ * @description: (input)<类别@单词, 个数> -> map -> <类别, 单词个数> -> combine -> <类别, 总单词个数> -> reduce -> <类别, 总单词个数>(output)
  * @author: dahongdou
  * @date: 2020/10/21
  **/

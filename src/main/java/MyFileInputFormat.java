@@ -14,8 +14,13 @@ import org.apache.hadoop.mapreduce.lib.input.FileSplit;
 
 import java.io.IOException;
 
-public class MyFileInputFormat extends
-        FileInputFormat<NullWritable, BytesWritable> {
+/**
+ * @className: MyFileInputFormat
+ * @description: 自定义文件输入格式，主要是控制生成的key-value对。
+ * @author: dahongdou
+ * @date: 2020/10/21
+ **/
+public class MyFileInputFormat extends FileInputFormat<NullWritable, BytesWritable> {
     @Override
     public RecordReader<NullWritable, BytesWritable> createRecordReader(
             InputSplit inputSplit, TaskAttemptContext taskAttemptContext)
@@ -29,6 +34,12 @@ public class MyFileInputFormat extends
     protected boolean isSplitable(JobContext context, Path file) {return false; }
 }
 
+/**
+ * @className: MyFileRecordReader
+ * @description: 定义生成的value对为文件内容。
+ * @author: dahongdou
+ * @date: 2020/10/21
+ **/
 class MyFileRecordReader extends
         RecordReader<NullWritable, BytesWritable> {
 

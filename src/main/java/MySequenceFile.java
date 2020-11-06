@@ -17,15 +17,19 @@ import org.apache.hadoop.util.ToolRunner;
 import java.io.IOException;
 
 /**
- * @className: Evaluation
- * @description: 评估分类效果，三个指标precision, recall, F1
+ * @className: MySequenceFile
+ * @description: 将小文件打包成sequenceFile。
+ * @description: (input)<NullWritable, BytesWritable> -> map -> <Text, BytesWritable>(output)
+ * @description: (input)<null, 文件内容> -> map -> <类别@文件名, 文件内容>(output)
  * @author: dahongdou
  * @date: 2020/10/21
  **/
 public class MySequenceFile extends Configured implements Tool {
 
-    static class FileMapper extends Mapper<NullWritable, BytesWritable,
-            Text, BytesWritable> {
+    static class FileMapper extends Mapper<NullWritable, BytesWritable, Text, BytesWritable> {
+        /**
+         * 写入sequenceFile的小文件的key值，形式为“类别@文件名”
+         */
         private Text filenameKey;
 
         @Override
@@ -50,12 +54,14 @@ public class MySequenceFile extends Configured implements Tool {
         Job job = Job.getInstance(conf, "SequenceFile");
 
         job.setJarByClass(MySequenceFile.class);
+        job.setMapperClass(FileMapper.class);
+
         job.setInputFormatClass(MyFileInputFormat.class);
         job.setOutputFormatClass(SequenceFileOutputFormat.class);
         job.setOutputKeyClass(Text.class);
         job.setOutputValueClass(BytesWritable.class);
-        job.setMapperClass(FileMapper.class);
 
+        //最后一个参数为输出路径
         for(int i=0; i<args.length-1; i++){
             FileInputFormat.addInputPath(job, new Path(args[i]));
         }

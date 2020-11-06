@@ -19,6 +19,8 @@ import java.util.*;
 /**
  * @className: CalculateNaiveBayesProbability
  * @description: 计算每个类别每个单词的朴素贝叶斯概率
+ * @description: (input)<Text, BytesWritable> -> map -> <Text, DoubleWritable> -> reduce -> <Text, Text>(output)
+ * @description: (input)<类别@文件名, 文件内容> -> map -> <类别@文件名@预测类别, 概率> -> reduce -> <类别@文件名, 预测类别>(output)
  * @author: dahongdou
  * @date: 2020/10/21
  **/
@@ -80,7 +82,7 @@ public class CalculateNaiveBayesProbability extends Configured implements Tool {
                 S += num;
             }
 
-            //根据朴素贝叶斯公式计算每个单词的条件概率
+            //根据朴素贝叶斯公式计算每个单词的条件概率，以便后面直接使用
             categoryWordProbability = new HashMap<String, Double>();
             for(Map.Entry<String, Integer> entry : wordCount.entrySet()) {
                 String category = entry.getKey().split("@")[0];
@@ -99,9 +101,11 @@ public class CalculateNaiveBayesProbability extends Configured implements Tool {
             //String category = key.toString().split("@")[0];
             while (itr.hasMoreTokens()) {
                 String word = itr.nextToken();
+
                 //forecastCategory预测为哪个类别，每个类别都需要预测得到一个概率。
                 for(String forecastCategory : categorySet) {
                     Double probability = 0.0;
+
                     //用forecastCategory和word组成key，判断训练集这个预测类别是否存在这个单词。是，则直接取概率；否，则设定次数为1.
                     String forecastCategoryWordKey = forecastCategory + "@" + word;
                     if(categoryWordProbability.containsKey(forecastCategoryWordKey)) {
